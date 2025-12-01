@@ -1,69 +1,59 @@
-TD3 on CartPole-Swingup — Reinforcement Learning Project
+# 🌟 TD3 on CartPole-Swingup — Reinforcement Learning 
 
-This repository contains my implementation of the Twin Delayed Deep Deterministic Policy Gradient (TD3) algorithm applied to the CartPole-Swingup task from the DeepMind Control Suite (DMC).
-The assignment requires training using seeds 0, 1, 2, evaluation using seed 10, and plotting the mean ± standard deviation learning curve.
+This repository contains an implementation of the **Twin Delayed Deep Deterministic Policy Gradient (TD3)** algorithm applied to the **CartPole-Swingup** task from the **DeepMind Control Suite (DMC)**.  
+The assignment requires training with seeds **0, 1, 2**, evaluating with seed **10**, and plotting the **mean ± standard deviation** learning curve.
 
-🚀 Project Overview
+## 🚀 Project Overview
 
-This project solves the CartPole-Swingup task, where the pole starts in the downward position and must be swung up and stabilized.
-The environment is continuous-control, making it well-suited for actor–critic algorithms like TD3.
+The CartPole-Swingup environment starts with the pole **hanging downward**, requiring the agent to:
+- Pump energy to swing the pole up  
+- Balance it near the upright position  
 
-Why TD3?
+TD3 is ideal for this task because of its:
+- 🟦 **Twin Q-networks** (fixes overestimation)
+- 🔁 **Delayed policy updates** (more stable learning)
+- 🎯 **Target policy smoothing** (robust critic targets)
+- 🧭 **Deterministic actor + action noise** (controlled exploration)
 
-TD3 improves upon DDPG through:
 
-Twin Q-networks → reduces overestimation
+## 🧠 Algorithm: TD3
 
-Delayed policy updates → stabilizes learning
+TD3 (Fujimoto et al., 2018) is a deterministic actor–critic method for continuous actions.
 
-Target policy smoothing → improves robustness
+### 🔑 Key Features
+- Twin Q-functions  
+- Policy smoothing with Gaussian noise  
+- Clipped noise for stability  
+- Actor updates less frequently than critic  
+- NormalActionNoise for exploration  
 
-Deterministic policy with action noise for exploration
 
-🧠 Algorithm: Twin Delayed Deep Deterministic Policy Gradient (TD3)
+## 🛠️ Installation
 
-TD3 is a deterministic actor–critic method designed for continuous action spaces.
-
-🟦 Key Features:
-
-Twin Q-functions to fix overestimation
-
-Target policy smoothing (σ = 0.2, clipped to 0.5)
-
-Delayed actor updates (actor updates less frequently)
-
-Deterministic actor, exploration via NormalActionNoise
-
-🛠️ Installation
-1. Create and activate a conda environment
 conda create -n RLassign python=3.10
 conda activate RLassign
 
-2. Install dependencies
 pip install stable-baselines3[extra]
-pip install gymnasium
-pip install "gymnasium[other]"
-pip install dm_control
-pip install seaborn matplotlib moviepy
+pip install gymnasium "gymnasium[other]"
+pip install dm_control seaborn matplotlib moviepy
 
-Note: moviepy is required for video recording.
 
 🎯 Training
 
-Run the training script:
+Run:
 
 python train.py
 
 
 This will:
 
-Train TD3 on seeds 0, 1, 2
+Train TD3 with seeds 0, 1, 2
 
-Save logs in logs/seed_X.monitor.csv
+Save logs → logs/seed_X.monitor.csv
 
-Save models in weights/td3_cartpole_seedX.zip
+Save models → weights/td3_cartpole_seedX.zip
 
-Training Code Snippet (from train.py)
+📝 Training Snippet
 action_noise = NormalActionNoise(
     mean=np.zeros(n_actions),
     sigma=0.1 * np.ones(n_actions)
@@ -79,51 +69,65 @@ model = TD3(
 )
 model.learn(total_timesteps=200000)
 
-🎥 Evaluation
+## 🎥 TD3 Evaluation Videos (Seed 10)
 
-Evaluate using seed 10 and record videos:
+### ▶️ TD3 Tested with CartPole Seed 10 (Trained Seed 0)
+https://github.com/Deeepikaa07/TD3-CartPole-Swingup/issues/1#issue-3678741887
 
-python eval.py
+### ▶️ TD3 Tested with CartPole Seed 10 (Trained Seed 1)
+https://github.com/Deeepikaa07/TD3-CartPole-Swingup/issues/2#issue-3678743926
 
+### ▶️ TD3 Tested with CartPole Seed 10 (Trained Seed 2)
+https://github.com/Deeepikaa07/TD3-CartPole-Swingup/issues/3#issue-3678746581 
 
-Videos will be saved inside:
-
-[![TD3 CartPole Evaluation](videos/td3_thumbnail.png)](videos/td3_trained_seed0/eval-episode-0.mp4)
-[![TD3 CartPole Evaluation](videos/td3_thumbnail.png)](videos/td3_trained_seed1/eval-episode-0.mp4)
-[![TD3 CartPole Evaluation](videos/td3_thumbnail.png)](videos/td3_trained_seed2/eval-episode-0.mp4)
 
 📊 Learning Curve
 
-You can generate the mean ± std plot using the notebook:
+You can generate the mean ± std plot using:
 
 plot.ipynb
 
+### Final TD3 Learning Curve
 
-or directly from the provided Python plotting script.
+<div align="center">
+  <img src="td3_eval.png" width="70%">
+</div>
 
-Final Plot (TD3 – Mean ± Std over 3 Seeds)
-<img src="td3_eval.png" width="600">
-⚙️ Hyperparameters
-Parameter	Value
-Algorithm	TD3
-Learning Rate	3e-4
-Batch Size	256
-Buffer Size	1e6
-Discount Factor (γ)	0.99
-Tau	0.005
-Policy Noise	0.2
-Noise Clip	0.5
-Action Noise	0.1
-Network Architecture	[256, 256]
-Activation	ReLU
-Timesteps	200,000 per seed
+---
 
-📈 Results Summary
+## ⚙️ Hyperparameters
 
-TD3 successfully swings up the pole and stabilizes it.
+| Parameter | Value |
+|----------|--------|
+| Algorithm | TD3 |
+| Learning Rate | 3e-4 |
+| Batch Size | 256 |
+| Buffer Size | 1e6 |
+| Discount (γ) | 0.99 |
+| Tau | 0.005 |
+| Policy Noise | 0.2 |
+| Noise Clip | 0.5 |
+| Action Noise | 0.1 |
+| Network Architecture | [256, 256] |
+| Activation | ReLU |
+| Timesteps | 200,000 per seed |
 
-Final performance stabilizes around 600–650 reward.
+## 📈 Results Summary
 
-Standard deviation decreases over time → stable learning across seeds.
+✅ TD3 successfully swings up and stabilizes the pole
 
-Deterministic policy + action noise worked well despite SAC being more common for this environment.
+📉 Standard deviation shrinks over time → stable learning
+
+🎯 Final performance stabilizes around 600–650 reward
+
+⚠️ Seed-to-seed variability is expected in deterministic actor–critic algorithms
+
+🤖 Despite SAC performing better typically, TD3 performed strongly on seeds 0 & 2
+
+## 📚 References
+
+Fujimoto, S., van Hoof, H., & Meger, D.
+Addressing Function Approximation Error in Actor-Critic Methods. ICML, 2018.
+
+Stable-Baselines3 TD3 Documentation
+https://stable-baselines3.readthedocs.io/en/master/modules/td3.html
